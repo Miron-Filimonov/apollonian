@@ -3,8 +3,5 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              x:Class="apollonian.MainPage">
-    <Grid>
-        <views:SKCanvasView x:Name="canvas"
-                            PaintSurface="OnPainting"/>
-    </Grid>
+    <views:SKCanvasView PaintSurface="OnPainting"/>
 </ContentPage>

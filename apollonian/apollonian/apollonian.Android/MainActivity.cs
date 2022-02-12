@@ -14,6 +14,9 @@ namespace apollonian.Droid
         {
             base.OnCreate(savedInstanceState);
 
+            App.ScreenHeight = Resources.DisplayMetrics.HeightPixels;
+            App.ScreenWidth = Resources.DisplayMetrics.WidthPixels;
+
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
