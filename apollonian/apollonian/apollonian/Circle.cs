@@ -13,7 +13,6 @@ namespace apollonian
         {
             Center = new PointF(new_x, new_y);
             Radius = Math.Abs(new_radius);
-            Random randomGen = new Random();
         }
 
         public void Draw(SKCanvas canvas, SKColor color)

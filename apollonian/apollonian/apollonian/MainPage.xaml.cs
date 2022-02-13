@@ -7,6 +7,7 @@ namespace apollonian
 {
     public partial class MainPage : ContentPage
     {
+        private int _globalLevel = 10;
         public MainPage()
         {
             InitializeComponent();
@@ -50,6 +51,14 @@ namespace apollonian
             circle0.Draw(canvas, SKColors.LightBlue);
             circle1.Draw(canvas, SKColors.LightGreen);
             circle2.Draw(canvas, SKColors.LightPink);
+
+            //найти центральный круг
+            FindCircleOutsideAll(_globalLevel, canvas, circle0, circle1, circle2);
+
+            // найти круги, касающиеся большого круга.
+            FindCircleOutsideTwo(_globalLevel, canvas, circle0, circle1, big_circle);
+            FindCircleOutsideTwo(_globalLevel, canvas, circle1, circle2, big_circle);
+            FindCircleOutsideTwo(_globalLevel, canvas, circle2, circle0, big_circle);
         }
 
         private Circle FindApollonianCircle(Circle c1, Circle c2, Circle c3, int s1, int s2, int s3)
@@ -122,6 +131,41 @@ namespace apollonian
 
             if ((Math.Abs(xs) < tiny) || (Math.Abs(ys) < tiny) || (Math.Abs(rs) < tiny)) return null;
             return new Circle(xs, ys, rs);
+        }
+
+        private void FindCircleOutsideAll(int level, SKCanvas canvas, Circle circle0, Circle circle1, Circle circle2)
+        {
+            Circle new_circle = FindApollonianCircle(
+                circle0, circle1, circle2, 1, 1, 1);
+            if (new_circle == null) return;
+            if (new_circle.Radius < 0.1) return;
+
+            new_circle.Draw(canvas, SKColors.Blue);
+
+            if (--level > 0)
+            {
+                FindCircleOutsideAll(level, canvas, circle0, circle1, new_circle);
+                FindCircleOutsideAll(level, canvas, circle0, circle2, new_circle);
+                FindCircleOutsideAll(level, canvas, circle1, circle2, new_circle);
+            }
+        }
+
+
+        private void FindCircleOutsideTwo(int level, SKCanvas canvas, Circle circle0, Circle circle1, Circle circle_contains)
+        {
+            Circle new_circle = FindApollonianCircle(
+                circle0, circle1, circle_contains, 1, 1, -1);
+            if (new_circle == null) return;
+            if (new_circle.Radius < 0.1) return;
+
+            new_circle.Draw(canvas, SKColors.Red);
+
+            if (--level > 0)
+            {
+                FindCircleOutsideTwo(level, canvas, new_circle, circle0, circle_contains);
+                FindCircleOutsideTwo(level, canvas, new_circle, circle1, circle_contains);
+                FindCircleOutsideAll(level, canvas, circle0, circle1, new_circle);
+            }
         }
 
         private double[] QuadraticSolutions(double a, double b, double c)
