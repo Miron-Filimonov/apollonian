@@ -2,31 +2,45 @@
 using SkiaSharp;
 using System;
 using SkiaSharp.Views.Forms;
+using System.Timers;
 
 namespace apollonian
 {
     public partial class MainPage : ContentPage
     {
-        private int _globalLevel = 10;
+        private readonly Timer _timer = new Timer(1000);
+        private int _globalLevel = 3;
+        private int _levelIterator = 1;
+
         public MainPage()
         {
+            SKCanvasView canvasView = new SKCanvasView();
+            canvasView.PaintSurface += OnPainting;
+            this.Content = canvasView;
+            _timer.Elapsed += delegate { canvasView.InvalidateSurface(); canvasView.Rotation += 1; };
             InitializeComponent();
         }
 
+
+        //событие отрисовки изображения
         private void OnPainting(object sender, SKPaintSurfaceEventArgs e)
         {
-            var view = sender as SKCanvasView;
-            var surface = e.Surface;
-            var canvas = surface.Canvas;
+            var  canvas = e.Surface.Canvas;
             canvas.Clear(SKColors.Black);
             MakeImage(canvas);
+            _timer.Start();
+            _timer.AutoReset = true;
         }
 
+        //создание изображения
         private void MakeImage(SKCanvas canvas)
         {
+            canvas.Clear(SKColors.Black);
             float imageWidth = Math.Min(App.ScreenWidth, App.ScreenHeight);
             float imageHeight = Math.Max(App.ScreenWidth, App.ScreenHeight);
             FindApollonianPacking(canvas, imageWidth, imageHeight);
+            _globalLevel += _levelIterator;
+            if (_globalLevel == 10 || _globalLevel == 3) _levelIterator = -_levelIterator;
         }
 
         private void FindApollonianPacking(SKCanvas canvas, float width, float height)
@@ -47,18 +61,18 @@ namespace apollonian
                 circle0, circle1, circle2, -1, -1, -1);
 
             // нариовать круги
-            big_circle.Draw(canvas, SKColors.Bisque);
-            circle0.Draw(canvas, SKColors.LightBlue);
-            circle1.Draw(canvas, SKColors.LightGreen);
-            circle2.Draw(canvas, SKColors.LightPink);
+            big_circle.Draw(canvas, SKColors.AntiqueWhite);
+            circle0.Draw(canvas);
+            circle1.Draw(canvas);
+            circle2.Draw(canvas);
 
             //найти центральный круг
-            FindCircleOutsideAll(_globalLevel, canvas, circle0, circle1, circle2);
+            FindCircleOutsideAll(canvas, _globalLevel, circle0, circle1, circle2);
 
             // найти круги, касающиеся большого круга.
-            FindCircleOutsideTwo(_globalLevel, canvas, circle0, circle1, big_circle);
-            FindCircleOutsideTwo(_globalLevel, canvas, circle1, circle2, big_circle);
-            FindCircleOutsideTwo(_globalLevel, canvas, circle2, circle0, big_circle);
+            FindCircleOutsideTwo(canvas, _globalLevel, circle0, circle1, big_circle);
+            FindCircleOutsideTwo(canvas, _globalLevel, circle1, circle2, big_circle);
+            FindCircleOutsideTwo(canvas, _globalLevel, circle2, circle0, big_circle);
         }
 
         private Circle FindApollonianCircle(Circle c1, Circle c2, Circle c3, int s1, int s2, int s3)
@@ -133,38 +147,38 @@ namespace apollonian
             return new Circle(xs, ys, rs);
         }
 
-        private void FindCircleOutsideAll(int level, SKCanvas canvas, Circle circle0, Circle circle1, Circle circle2)
+        private void FindCircleOutsideAll(SKCanvas canvas, int level, Circle circle0, Circle circle1, Circle circle2)
         {
             Circle new_circle = FindApollonianCircle(
                 circle0, circle1, circle2, 1, 1, 1);
             if (new_circle == null) return;
             if (new_circle.Radius < 0.1) return;
 
-            new_circle.Draw(canvas, SKColors.Blue);
+            new_circle.Draw(canvas);
 
             if (--level > 0)
             {
-                FindCircleOutsideAll(level, canvas, circle0, circle1, new_circle);
-                FindCircleOutsideAll(level, canvas, circle0, circle2, new_circle);
-                FindCircleOutsideAll(level, canvas, circle1, circle2, new_circle);
+                FindCircleOutsideAll(canvas, level, circle0, circle1, new_circle);
+                FindCircleOutsideAll(canvas, level, circle0, circle2, new_circle);
+                FindCircleOutsideAll(canvas, level, circle1, circle2, new_circle);
             }
         }
 
 
-        private void FindCircleOutsideTwo(int level, SKCanvas canvas, Circle circle0, Circle circle1, Circle circle_contains)
+        private void FindCircleOutsideTwo(SKCanvas canvas, int level, Circle circle0, Circle circle1, Circle circle_contains)
         {
             Circle new_circle = FindApollonianCircle(
                 circle0, circle1, circle_contains, 1, 1, -1);
             if (new_circle == null) return;
             if (new_circle.Radius < 0.1) return;
 
-            new_circle.Draw(canvas, SKColors.Red);
+            new_circle.Draw(canvas);
 
             if (--level > 0)
             {
-                FindCircleOutsideTwo(level, canvas, new_circle, circle0, circle_contains);
-                FindCircleOutsideTwo(level, canvas, new_circle, circle1, circle_contains);
-                FindCircleOutsideAll(level, canvas, circle0, circle1, new_circle);
+                FindCircleOutsideTwo(canvas, level, new_circle, circle0, circle_contains);
+                FindCircleOutsideTwo(canvas, level, new_circle, circle1, circle_contains);
+                FindCircleOutsideAll(canvas, level, circle0, circle1, new_circle);
             }
         }
 

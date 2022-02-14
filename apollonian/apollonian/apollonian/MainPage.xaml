@@ -2,6 +2,6 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
-             x:Class="apollonian.MainPage">
-    <views:SKCanvasView PaintSurface="OnPainting"/>
+             x:Class="apollonian.MainPage"
+             BackgroundColor="Black">
 </ContentPage>
