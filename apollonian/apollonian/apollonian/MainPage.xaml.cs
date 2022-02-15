@@ -8,7 +8,7 @@ namespace apollonian
 {
     public partial class MainPage : ContentPage
     {
-        private readonly Timer _timer = new Timer(1000);
+        private readonly Timer _timer = new Timer(3000);
         private int _globalLevel = 3;
         private int _levelIterator = 1;
 
@@ -17,7 +17,8 @@ namespace apollonian
             SKCanvasView canvasView = new SKCanvasView();
             canvasView.PaintSurface += OnPainting;
             this.Content = canvasView;
-            _timer.Elapsed += delegate { canvasView.InvalidateSurface(); canvasView.Rotation += 1; };
+
+            _timer.Elapsed += delegate { canvasView.InvalidateSurface();  };
             InitializeComponent();
         }
 
@@ -40,7 +41,8 @@ namespace apollonian
             float imageHeight = Math.Max(App.ScreenWidth, App.ScreenHeight);
             FindApollonianPacking(canvas, imageWidth, imageHeight);
             _globalLevel += _levelIterator;
-            if (_globalLevel == 10 || _globalLevel == 3) _levelIterator = -_levelIterator;
+            if (_globalLevel == 10 || _globalLevel == 3) 
+                _levelIterator = -_levelIterator;
         }
 
         private void FindApollonianPacking(SKCanvas canvas, float width, float height)
@@ -48,7 +50,8 @@ namespace apollonian
             // 3 центральных круга
             float radius = width * 0.225f;
             float x = width / 2;
-            float y = height / 2 - radius;
+            float y = height / 2 - radius - 37.59216f;
+            //37.59216f - радиус центрального круга нужен чтобы картинка было ровно по центру
             Circle circle0 = new Circle(x, y, radius);
             x -= radius;
             y += (float)(radius * Math.Sqrt(3));

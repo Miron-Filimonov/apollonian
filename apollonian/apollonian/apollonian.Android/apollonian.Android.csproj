@@ -47,6 +47,11 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidLinkMode>None</AndroidLinkMode>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -95,7 +100,7 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\logo.jpg" />
+    <AndroidResource Include="Resources\drawable\logo_splash.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\apollonian\apollonian.csproj">
@@ -107,6 +112,25 @@
     <AndroidResource Include="Resources\drawable\splash_screen.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-hdpi\logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-mdpi\logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xhdpi\logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\logo.jpg" />
+    <AndroidResource Include="Resources\drawable-ldpi\logo.jpg" />
+    <AndroidResource Include="Resources\drawable-mdpi\logo.jpg" />
+    <AndroidResource Include="Resources\drawable-xhdpi\logo.jpg" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\logo.jpg" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\logo.jpg" />
+    <Content Include="Resources\mipmap-xxhdpi\logo.jpg" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\logo.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
